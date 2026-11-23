@@ -26,28 +26,28 @@ const SCENES = [
   },
   {
     id: "SC-02", name: "Phòng trực", time: "00:15",
-    description: "Máy bộ đàm phát ra tiếng rè đều đặn. Một cuốn sổ trực, hồ sơ nhân sự và máy cassette nằm trên bàn.",
+    description: "Máy bộ đàm phát ra tiếng rè đều đặn. Cuốn sổ trực, hồ sơ nhân sự và máy phát băng cassette nằm trên mặt bàn gỗ.",
     detail: "Bản tin thời tiết vừa in ra có một dòng mô tả chính xác bộ quần áo bạn đang mặc."
   },
   {
     id: "SC-03", name: "Khu nghỉ nhân viên", time: "00:35",
-    description: "Những chiếc giường được xếp ngay ngắn. Tủ đồ số 04 thỉnh thoảng phát ra ba tiếng gõ.",
-    detail: "Một tủ dụng cụ bị khóa. Trên sàn có dấu kéo lê hướng về phía phòng máy."
+    description: "Những chiếc giường sắt xếp ngay ngắn dọc vách tường. Dãy tủ cá nhân đứng im lìm trong ánh đèn mờ.",
+    detail: "Tủ dụng cụ bên trái bị khóa chặt. Ở góc hành lang, tủ đồ số 04 thỉnh thoảng rung nhẹ."
   },
   {
     id: "SC-04", name: "Phòng máy", time: "01:10",
-    description: "Máy phát điện hoạt động không ổn định. Sơ đồ tải điện được ghim cạnh bảng điều khiển.",
-    detail: "Một nhánh điện phụ đang tiêu thụ công suất bất thường. Chế độ OVERLOAD được đánh dấu bằng mực đỏ."
+    description: "Tổ máy phát điện kêu trầm đục. Sơ đồ tải điện được ghim ngay cạnh bảng điều khiển trung tâm.",
+    detail: "Một nhánh điện phụ đang dao động bất thường. Công tắc OVERLOAD được sơn viền đỏ cảnh báo."
   },
   {
     id: "SC-05", name: "Phòng quan sát", time: "01:55",
-    description: "Màn hình radar phủ đầy nhiễu. Một góc màn hình bị che bởi vết xước hình bán nguyệt.",
-    detail: "Có một ngăn kéo bí mật phía dưới bàn thiết bị. Camera ghi lại sương di chuyển về phía nguồn sáng."
+    description: "Màn hình radar phủ đầy nhiễu tĩnh điện. Một vết xước hình bán nguyệt hằn sâu trên mặt kính.",
+    detail: "Dưới gầm bàn thiết bị có một ngăn kéo khóa chốt số. Màn hình CCTV hành lang vẫn đang ghi hình."
   },
   {
     id: "SC-06", name: "Buồng đèn", time: "02:30",
-    description: "Thấu kính khổng lồ chiếm gần hết căn phòng. Cánh cửa buồng đèn có một bảng nhập mã tần số.",
-    detail: "Chùm sáng trắng quét qua căn phòng theo chu kỳ. Vùng trung tâm không có bộ lọc đỏ là vùng nguy hiểm."
+    description: "Thấu kính Fresnel khổng lồ chiếm trọn trung tâm căn phòng, xoay đều phát ra luồng sáng lạnh lẽo.",
+    detail: "Bên cạnh trụ thấu kính có khay lắp kính lọc quang học và bảng điều khiển tần số phát."
   }
 ] as const;
 
@@ -62,11 +62,14 @@ const SCENE_RULE_UNLOCKS: Record<string, string[]> = {
 
 const ITEMS: Record<string, { name: string; note: string }> = {
   "I-01": { name: "Đèn pin", note: "Đèn pin cầm tay. Bấm vào ô vật phẩm để Bật/Tắt (lưu ý Quy tắc 10 khi sương tràn hoặc điện LOW)." },
-  "I-02": { name: "Chìa khóa tủ", note: "Chìa khóa đồng mở tủ dụng cụ tại Khu nghỉ nhân viên (SC-03)." },
-  "I-03": { name: "Băng cassette", note: "Cuộn băng ghi âm cuối cùng. Phát bằng máy cassette tại Phòng trực (SC-02)." },
-  "I-04": { name: "Cầu chì 30A", note: "Cầu chì công nghiệp dùng để ổn định bảng tải điện Phòng máy (SC-04)." },
-  "I-05": { name: "Bộ lọc đỏ", note: "Kính lọc bước sóng > 620nm. Lắp vào thấu kính Buồng đèn (SC-06)." },
-  "I-06": { name: "Sổ mã tần số", note: "Bản ghi kỹ thuật trạm: 'Tần số mở khóa liên động buồng đèn Mũi Sương: 6208 Hz'." }
+  "I-02": { name: "Chìa khóa tủ", note: "Chìa khóa đồng khắc số 03, dùng mở tủ dụng cụ tại Khu nghỉ nhân viên (SC-03)." },
+  "I-03": { name: "Băng cassette", note: "Cuộn băng ghi âm hai mặt tìm thấy trong tủ dụng cụ. Phát bằng máy cassette tại Phòng trực (SC-02)." },
+  "I-04": { name: "Cầu chì 30A", note: "Cầu chì công nghiệp chịu tải cao dùng cho bảng mạch Phòng máy (SC-04)." },
+  "I-05": { name: "Bộ lọc đỏ", note: "Kính lọc quang học bước sóng > 620nm. Lắp vào khay thấu kính tại Buồng đèn (SC-06)." },
+  "I-06": {
+    name: "Sổ mã tần số",
+    note: "Bảng hiệu chuẩn liên động chuỗi hải đăng: Trạm 07 = 6162 Hz | Trạm 08 = 6185 Hz | Trạm 09 = [Tần số Trạm 08 cộng thêm bước sóng chuẩn +23 Hz]."
+  }
 };
 
 const RULES: RuleDefinition[] = [
@@ -143,7 +146,7 @@ const RULES: RuleDefinition[] = [
       { actionTag: ACTION_TAGS.USE_OBSERVATION_GEAR, condition: { not: { flagEquals: { key: "power_mode", value: "low" } } } }
     ],
     maxViolations: 1,
-    onViolate: { effects: [{ type: "SHOW_LOG", message: "[VI PHẠM R-07] Thiết bị bị nhiễu và không thể đọc dữ liệu." }] },
+    onViolate: { effects: [{ type: "SHOW_LOG", message: "[VI PHẠM R-07] Thiết bị bị nhiễu cao tần và không thể đọc dữ liệu." }] },
     countermeasureHint: "Chuyển nguồn điện về LOW."
   },
   {
@@ -165,7 +168,7 @@ const RULES: RuleDefinition[] = [
     transformedText: "Trạm trưởng đã mất tích. Không nghe điện thoại nội bộ; hãy ngắt kết nối.",
     violationTriggers: [{ actionTag: ACTION_TAGS.ANSWER_PHONE }],
     maxViolations: 1,
-    onViolate: { effects: [{ type: "SHOW_LOG", message: "[VI PHẠM R-09] Đầu dây bên kia gọi đúng tên bạn." }] },
+    onViolate: { effects: [{ type: "SHOW_LOG", message: "[VI PHẠM R-09] Đầu dây bên kia gọi đúng tên bạn bằng giọng trẻ nhỏ." }] },
     countermeasureHint: "Xác minh hồ sơ nhân sự trước khi nghe máy."
   },
   {
@@ -188,7 +191,6 @@ const RULES: RuleDefinition[] = [
   }
 ];
 
-/** EventDefinition xử lý các bẫy quy tắc giả (R-04, R-05, R-06) theo hướng data-driven */
 const CHAPTER1_EVENT_DEFINITIONS: EventDefinition[] = [
   {
     id: "EV-R04-SIGN",
@@ -293,9 +295,9 @@ function createEngine() {
   const investigation = new InvestigationSystem(store, executor, dispatcher, CHAPTER1_CLUES, CHAPTER1_DEDUCTION_GROUPS);
 
   const puzzleDefinitions = [
-    { id: "PZ-01", sceneId: "SC-04", title: "Cân bằng tải điện", description: "Nhập mã chế độ tải an toàn theo sơ đồ mạch điện.", solutionType: "passcode" as const },
-    { id: "PZ-02", sceneId: "SC-05", title: "Tọa độ điểm mù", description: "Nhập mã tọa độ 4 chữ số quan sát được trên màn hình radar.", solutionType: "passcode" as const },
-    { id: "PZ-03", sceneId: "SC-05", title: "Khóa tần số buồng đèn", description: "Nhập tần số mở khóa liên động buồng đèn (4 chữ số).", solutionType: "passcode" as const }
+    { id: "PZ-01", sceneId: "SC-04", title: "Cân bằng tải điện", description: "Nhập mã chế độ tải triệt nhiễu được ghi trên sơ đồ kỹ thuật.", solutionType: "passcode" as const },
+    { id: "PZ-02", sceneId: "SC-05", title: "Tọa độ điểm mù", description: "Ghép liền 4 chữ số từ góc phương vị (2 chữ số) và biên độ lệch pha (2 chữ số) đo được trên radar.", solutionType: "passcode" as const },
+    { id: "PZ-03", sceneId: "SC-05", title: "Khóa tần số buồng đèn", description: "Nhập 4 chữ số tần số cộng hưởng của Trạm 09 tính từ bảng hiệu chuẩn.", solutionType: "passcode" as const }
   ];
   const puzzleSolutions = [
     {
@@ -315,7 +317,7 @@ function createEngine() {
           { type: "ADD_ITEM" as const, itemId: "I-05" },
           { type: "SET_FLAG" as const, key: "red_filter_installed", value: false },
           { type: "DISCOVER_CLUE" as const, clueId: "C-08" },
-          { type: "SHOW_LOG" as const, message: "Ngăn bí mật mở ra. Bạn tìm thấy Bộ lọc đỏ (I-05) và Bản nháp viết tay (C-08)." }
+          { type: "SHOW_LOG" as const, message: "Ngăn bí mật mở ra. Bạn tìm thấy Bộ lọc đỏ (I-05) và Bản nháp viết tay của Lê Văn Hùng (C-08)." }
         ]
       }
     },
@@ -323,7 +325,7 @@ function createEngine() {
       puzzleId: "PZ-03", expectedSolution: "6208",
       onSolve: {
         effects: [
-          { type: "SHOW_LOG" as const, message: "Mã tần số được chấp nhận. Chốt cơ khí cửa buồng đèn đã mở." }
+          { type: "SHOW_LOG" as const, message: "Tần số mở khóa được chấp nhận. Chốt cơ khí cửa buồng đèn đã nhả." }
         ]
       }
     }
@@ -334,7 +336,6 @@ function createEngine() {
 
 export default function App() {
   const engine = useMemo(() => createEngine(), []);
-  // Khởi tạo RuleSystem theo lifecycle của component để an toàn tuyệt đối với React StrictMode
   const rules = useMemo(
     () => new RuleSystem(engine.store, engine.evaluator, engine.executor, engine.dispatcher, RULES),
     [engine]
@@ -351,6 +352,8 @@ export default function App() {
   const [puzzleInputs, setPuzzleInputs] = useState<Record<string, string>>({});
   const [flash, setFlash] = useState(false);
   const [savedSlot, setSavedSlot] = useState<SaveData | null>(() => loadSavedFromStorage());
+  // Cơ chế cảnh báo quan sát 2 bước cho các bẫy nguy hiểm (không thêm core flag)
+  const [warnedActions, setWarnedActions] = useState<Record<string, boolean>>({});
 
   const state = engine.store.snapshot();
   const sceneIdx = SCENES.findIndex(s => s.id === state.currentSceneId);
@@ -379,6 +382,16 @@ export default function App() {
       unsubscribe();
     };
   }, [engine]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && activeModal !== null) {
+        setActiveModal(null);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [activeModal]);
 
   const say = (who: string, text: string, violation = false, writeLog = true) => {
     if (writeLog) {
@@ -409,6 +422,16 @@ export default function App() {
     refreshUI();
   };
 
+  // Kiểm tra quan sát cảnh báo lần 1 trước khi thực thi hành động rủi ro
+  const confirmRiskyAction = (key: string, warningSpeaker: string, warningText: string, executeFn: () => void) => {
+    if (!warnedActions[key]) {
+      setWarnedActions(prev => ({ ...prev, [key]: true }));
+      say(warningSpeaker, warningText, true, false);
+      return;
+    }
+    executeFn();
+  };
+
   const discoverClue = (id: string, text: string) => {
     if (discoveredClues.includes(id)) {
       say(`HỒ SƠ ${id}`, text, false, false);
@@ -422,7 +445,7 @@ export default function App() {
   const addItem = (id: string) => {
     if (has(id)) return;
     engine.store.addItem(id);
-    say("THU THẬP VẬT PHẨM", `Đã cất [${ITEMS[id]?.name ?? id}] vào túi đồ.`);
+    say("THU THẬP VẬT PHẨM", `Đã cất [${ITEMS[id]?.name ?? id}] vào túi đồ. Bấm vào ô vật phẩm bên dưới để kiểm tra chi tiết.`);
   };
 
   const getSceneLockReason = (id: string): string | null => {
@@ -449,7 +472,6 @@ export default function App() {
       return;
     }
 
-    // Kiểm tra R-08 qua hành động mở cửa buồng đèn thực tế
     if (id === "SC-06") {
       const beforeR08 = rules.getViolationCount("R-08");
       perform("OPEN_LANTERN_DOOR", "lantern_door");
@@ -458,7 +480,6 @@ export default function App() {
       }
     }
 
-    // Kiểm tra R-10 trước khi rời cảnh; nếu vi phạm R-10 hoặc kích hoạt ending thì dừng chuyển cảnh
     const beforeR10 = rules.getViolationCount("R-10");
     perform("LEAVE_SCENE", `leave_${state.currentSceneId}`);
     const postLeaveState = engine.store.snapshot();
@@ -489,7 +510,7 @@ export default function App() {
       setActiveModal(null);
       say("GIẢI MÃ THÀNH CÔNG", `Cơ cấu ${puzzleId} đã mở khóa!`);
     } else if (result.status === "failed") {
-      say("MÃ KHÔNG KHỚP", `Sai mật mã ${puzzleId} (lần thử ${result.attemptsUsed}). Hãy kiểm tra tài liệu hoặc vật phẩm đã thu thập.`, true, false);
+      say("MÃ KHÔNG KHỚP", `Sai mật mã ${puzzleId} (lần thử ${result.attemptsUsed}). Hãy đối chiếu kỹ thông số quan sát và vật phẩm trong túi đồ.`, true, false);
     } else {
       say("THÔNG BÁO", `Không thể thực hiện ${puzzleId}: ${result.status}.`, true, false);
     }
@@ -502,24 +523,34 @@ export default function App() {
     refreshUI();
   };
 
+  const inspectRadarGear = () => {
+    perform("USE_OBSERVATION_GEAR", "observation_gear");
+    if (String(engine.store.snapshot().flags.power_mode) === "low") {
+      say(
+        "DỮ LIỆU QUAN SÁT RADAR",
+        "Nguồn tải LOW đã triệt nhiễu sóng mang. Trên màn quét xuất hiện vùng mù của thấu kính tại: Góc phương vị 27° Bắc — Biên độ lệch pha 14′ (đối chiếu Sổ trực Trần Minh C-02 để lập mã tọa độ)."
+      );
+    }
+  };
+
   const getHintText = (): string => {
     if (!has("I-01")) return "Nhặt Đèn pin trên bệ gác Cổng trạm, tuyệt đối không mở cửa ngoài, rồi tiến vào Phòng trực (SC-02).";
     if (state.currentSceneId === "SC-01") return "Bấm 'Tiến tới Phòng trực' để bắt đầu kiểm tra hồ sơ ca trực.";
     if (!discoveredClues.includes("C-01") || !discoveredClues.includes("C-03")) {
-      return "Đọc Bản tin nhiệt và Hồ sơ nhân sự trên bàn trực để nắm tình trạng trạm trưởng.";
+      return "Đọc Bản tin nhiệt và Hồ sơ nhân sự trên bàn trực để nắm tình trạng trạm trưởng Lê Văn Hùng.";
     }
     if (state.flags.radio_state === "broadcasting") {
       return "Tạm dừng bộ đàm (PAUSED) để tránh lộ danh tính và đáp ứng khóa liên động buồng đèn.";
     }
-    if (!has("I-04")) return "Lấy Chìa khóa tủ (I-02) và Sổ mã tần số (I-06) ở Phòng trực, sau đó sang Khu nghỉ (SC-03) lấy Cầu chì 30A (I-04).";
-    if (!solved("PZ-01")) return "Sang Phòng máy (SC-04), đọc Sơ đồ tải điện để tìm chế độ tải an toàn rồi mở khóa PZ-01.";
+    if (!has("I-04")) return "Lấy Chìa khóa tủ (I-02) và Sổ mã tần số (I-06) ở Phòng trực, sau đó sang Khu nghỉ (SC-03) lấy Cầu chì 30A (I-04) và Băng cassette (I-03).";
+    if (!solved("PZ-01")) return "Sang Phòng máy (SC-04), đọc Sơ đồ tải điện (C-04) để tìm tên chế độ tải triệt nhiễu rồi nhập vào bảng PZ-01.";
     if (!has("I-05") || !solved("PZ-03")) {
-      return "Sang Phòng quan sát (SC-05), bật thiết bị quan sát để đọc tọa độ điểm mù (PZ-02) và tra cứu Sổ mã tần số (I-06) để mở khóa PZ-03.";
+      return "Tại Phòng quan sát (SC-05), bật Thiết bị quan sát để đo góc phương vị & biên độ lệch pha (PZ-02), đồng thời bấm vào Sổ mã tần số (I-06) trong túi đồ để tính tần số Trạm 09 (PZ-03).";
     }
     if (!state.flags.red_filter_installed) {
       return "Lên Buồng đèn (SC-06) và lắp Bộ lọc đỏ vào thấu kính trước khi bước vào vùng sáng trung tâm.";
     }
-    return "Mở Sổ tay đối chiếu các manh mối đã thu thập để phân loại quy tắc thật/giả trước khi quyết định kết thúc ca trực.";
+    return "Mở Sổ tay đối chiếu các manh mối (đặc biệt là C-01, C-02, C-04, C-07, C-08) để vạch trần các quy tắc giả trước khi quyết định kết thúc ca trực.";
   };
 
   const stageHotspots: Array<{
@@ -531,32 +562,47 @@ export default function App() {
         return [
           { id: "hs1", label: "Khe cổng sắt", x: "28%", y: "58%", onClick: () => say("QUAN SÁT", "Sương trắng đang áp sát hàng rào. Không có bóng người ở vọng gác.") },
           { id: "hs2", label: has("I-01") ? "✓ Đèn pin" : "Đèn pin trên bệ gác", x: "66%", y: "66%", done: has("I-01"), onClick: () => addItem("I-01") },
-          { id: "hs3", label: "Cửa ngoài", x: "48%", y: "46%", danger: true, disabled: Boolean(state.flags.fog_breached), onClick: () => perform("OPEN_EXTERIOR_DOOR", "hs_exterior_door") }
+          {
+            id: "hs3",
+            label: warnedActions["R01_DOOR"] ? "Mở chốt cửa ngoài (!)" : "Cửa ngoài",
+            x: "48%", y: "46%", danger: true, disabled: Boolean(state.flags.fog_breached),
+            onClick: () => confirmRiskyAction(
+              "R01_DOOR",
+              "DẤU HIỆU CẢNH BÁO · R-01",
+              "Lớp sương trắng ép sát khe cửa sắt phát ra tiếng rít lạnh buốt. Mở chốt lúc này sẽ phá vỡ rào chắn của trạm. Bấm lần nữa nếu bạn vẫn cố mở.",
+              () => perform("OPEN_EXTERIOR_DOOR", "hs_exterior_door")
+            )
+          }
         ];
       case "SC-02":
         return [
-          { id: "hs1", label: discoveredClues.includes("C-01") ? "✓ Bản tin nhiệt" : "Máy in bản tin", x: "23%", y: "48%", done: discoveredClues.includes("C-01"), onClick: () => discoverClue("C-01", "Bản tin mô tả chính xác trang phục của bạn.") },
-          { id: "hs2", label: discoveredClues.includes("C-03") ? "✓ Hồ sơ nhân sự" : "Hồ sơ trên bàn", x: "50%", y: "62%", done: discoveredClues.includes("C-03"), onClick: () => { discoverClue("C-03", "Hồ sơ xác nhận trạm trưởng đã mất tích."); setFlag("captain_missing_confirmed", true); } },
+          { id: "hs1", label: discoveredClues.includes("C-01") ? "✓ Bản tin nhiệt" : "Máy in bản tin", x: "23%", y: "48%", done: discoveredClues.includes("C-01"), onClick: () => discoverClue("C-01", "Bản tin mô tả chính xác trang phục của bạn trước thời điểm hiện tại.") },
+          { id: "hs2", label: discoveredClues.includes("C-03") ? "✓ Hồ sơ nhân sự" : "Hồ sơ trên bàn", x: "50%", y: "62%", done: discoveredClues.includes("C-03"), onClick: () => { discoverClue("C-03", "Hồ sơ xác nhận trạm trưởng Lê Văn Hùng đã mất tích."); setFlag("captain_missing_confirmed", true); } },
           { id: "hs3", label: `Bộ đàm (${String(state.flags.radio_state).toUpperCase()})`, x: "76%", y: "48%", done: state.flags.radio_state === "paused", onClick: () => { setFlag("radio_state", "paused"); say("BỘ ĐÀM", "Đã chuyển bộ đàm sang trạng thái TẠM DỪNG (PAUSED)."); } }
         ];
       case "SC-03":
         return [
           { id: "hs1", label: has("I-04") ? "✓ Cầu chì 30A" : "Hộp dụng cụ", x: "26%", y: "56%", done: has("I-04"), onClick: () => addItem("I-04") },
-          { id: "hs2", label: "Tủ đồ số 04", x: "72%", y: "48%", danger: true, onClick: () => {
+          { id: "hs2", label: state.flags.locker_knocking ? "Tủ số 04 (Đang gõ)" : "Tủ đồ số 04", x: "72%", y: "48%", danger: true, onClick: () => {
+            if (!state.flags.locker_knocking) {
+              setFlag("locker_knocking", true);
+              say("DẤU HIỆU CẢNH BÁO · R-06", "Từ bên trong cánh tủ thép lạnh buốt vang lên ba tiếng gõ chậm rãi: cốc... cốc... cốc. Bạn có thể chọn bỏ qua hoặc mở tủ.");
+              return;
+            }
             perform("OPEN_LOCKER_04", "locker_04");
-            if (!state.flags.locker_knocking) say("TỦ SỐ 04", "Tủ số 04 trống rỗng.");
           }}
         ];
       case "SC-04":
         return [
-          { id: "hs1", label: discoveredClues.includes("C-04") ? "✓ Sơ đồ tải điện" : "Bảng sơ đồ mạch", x: "28%", y: "44%", done: discoveredClues.includes("C-04"), onClick: () => discoverClue("C-04", "OVERLOAD làm thấu kính quét xuyên tường; LOW triệt nhiễu.") },
+          { id: "hs1", label: discoveredClues.includes("C-04") ? "✓ Sơ đồ tải điện" : "Bảng sơ đồ mạch", x: "28%", y: "44%", done: discoveredClues.includes("C-04"), onClick: () => discoverClue("C-04", "OVERLOAD làm thấu kính quét xuyên tường; LOW triệt nhiễu cho radar.") },
           { id: "hs2", label: solved("PZ-01") ? "✓ Nguồn: LOW" : "Bảng điều khiển tải", x: "68%", y: "54%", done: solved("PZ-01"), onClick: () => setActiveModal("puzzles") }
         ];
       case "SC-05":
         return [
-          { id: "hs1", label: discoveredClues.includes("C-06") ? "✓ Camera hành lang" : "Màn hình CCTV", x: "26%", y: "42%", done: discoveredClues.includes("C-06"), onClick: () => discoverClue("C-06", "Khi nguồn LOW hoặc sương tràn, sương hướng về nguồn sáng.") },
-          { id: "hs2", label: discoveredClues.includes("C-07") ? "✓ Bảng bộ lọc" : "Tài liệu hiệu chỉnh", x: "74%", y: "42%", done: discoveredClues.includes("C-07"), onClick: () => discoverClue("C-07", "Ánh sáng đỏ trên 620nm vô hiệu hóa chức năng ghi nhận.") },
-          { id: "hs3", label: solved("PZ-02") ? "✓ Ngăn bí mật" : "Ngăn kéo dưới bàn", x: "50%", y: "66%", done: solved("PZ-02"), onClick: () => setActiveModal("puzzles") }
+          { id: "hs1", label: discoveredClues.includes("C-06") ? "✓ Camera hành lang" : "Màn hình CCTV", x: "26%", y: "42%", done: discoveredClues.includes("C-06"), onClick: () => discoverClue("C-06", "Camera ghi lại cảnh sương mù bám theo ánh sáng đèn pin dọc hành lang.") },
+          { id: "hs2", label: "Màn hình Radar", x: "50%", y: "41%", done: String(state.flags.power_mode) === "low", onClick: inspectRadarGear },
+          { id: "hs3", label: discoveredClues.includes("C-07") ? "✓ Bảng bộ lọc" : "Tài liệu hiệu chỉnh", x: "74%", y: "42%", done: discoveredClues.includes("C-07"), onClick: () => discoverClue("C-07", "Ánh sáng đỏ trên 620nm vô hiệu hóa chức năng ghi nhận sinh học.") },
+          { id: "hs4", label: solved("PZ-02") ? "✓ Ngăn bí mật" : "Ngăn kéo dưới bàn", x: "50%", y: "68%", done: solved("PZ-02"), onClick: () => setActiveModal("puzzles") }
         ];
       case "SC-06":
         return [
@@ -590,21 +636,48 @@ export default function App() {
         return <>
           {choice("Quan sát cổng", () => say("QUAN SÁT", "Sương trắng đang áp sát hàng rào. Không có người ở vọng gác."))}
           {choice("Nhặt đèn pin", () => addItem("I-01"), { done: has("I-01"), disabled: has("I-01") })}
-          {choice("Mở cửa ngoài", () => perform("OPEN_EXTERIOR_DOOR", "hs_exterior_door"), { danger: true, disabled: Boolean(state.flags.fog_breached) })}
+          {choice(
+            warnedActions["R01_DOOR"] ? "Xác nhận mở cửa ngoài" : "Mở cửa ngoài",
+            () => confirmRiskyAction(
+              "R01_DOOR",
+              "DẤU HIỆU CẢNH BÁO · R-01",
+              "Sương mù dày đặc đang ép sát khe cửa ngoài. Nếu mở chốt, sương sẽ tràn vào trạm. Bấm lần nữa nếu bạn vẫn quyết định mở.",
+              () => perform("OPEN_EXTERIOR_DOOR", "hs_exterior_door")
+            ),
+            { danger: true, disabled: Boolean(state.flags.fog_breached) }
+          )}
           {moveNext}
         </>;
       case "SC-02":
         return <>
           {choice("Đọc bản tin nhiệt", () => discoverClue("C-01", "Bản tin mô tả chính xác trang phục của bạn."), { done: discoveredClues.includes("C-01") })}
-          {choice("Đọc sổ Trần Minh", () => discoverClue("C-02", "Ba nhân viên biến mất sau bản tin; Trần Minh từng ẩn trong điểm mù."), { done: discoveredClues.includes("C-02") })}
-          {choice("Đọc hồ sơ nhân sự", () => { discoverClue("C-03", "Hồ sơ xác nhận trạm trưởng đã mất tích."); setFlag("captain_missing_confirmed", true); }, { done: discoveredClues.includes("C-03") })}
-          {choice("Phát băng cassette", () => discoverClue("C-05", "Giọng nói trong băng mô tả thực thể bắt chước nhân viên mất tích."), { done: discoveredClues.includes("C-05"), disabled: !has("I-03") })}
+          {choice("Đọc sổ Trần Minh", () => discoverClue("C-02", "Trần Minh ghi lại phương pháp ghép góc phương vị + biên độ lệch pha trên radar để xác định góc mù của thấu kính."), { done: discoveredClues.includes("C-02") })}
+          {choice("Đọc hồ sơ nhân sự", () => { discoverClue("C-03", "Hồ sơ xác nhận trạm trưởng Lê Văn Hùng đã mất tích."); setFlag("captain_missing_confirmed", true); }, { done: discoveredClues.includes("C-03") })}
+          {choice("Phát băng cassette", () => discoverClue("C-05", "Mặt A: Cảnh báo của Trần Minh. Mặt B: Bản ghi âm gốc giọng con gái Hùng, có nhịp thở và ngữ điệu tự nhiên. Giọng nói qua điện thoại là một bản bắt chước, không phải bản ghi trên băng."), { done: discoveredClues.includes("C-05"), disabled: !has("I-03") })}
           {choice("Lấy chìa khóa tủ", () => addItem("I-02"), { done: has("I-02"), disabled: has("I-02") })}
           {choice("Lấy sổ mã tần số", () => addItem("I-06"), { done: has("I-06"), disabled: has("I-06") })}
           {choice("Tạm dừng bộ đàm", () => { setFlag("radio_state", "paused"); say("BỘ ĐÀM", "Bộ đàm đã tạm dừng."); }, { done: state.flags.radio_state === "paused" })}
           {choice("Trả lời bộ đàm", () => perform("ANSWER_RADIO", "radio_microphone"), { danger: true })}
-          {choice("Ký sổ trực", () => perform("SIGN_LOGBOOK", "duty_logbook"), { danger: true })}
-          {choice("Báo mã nhân viên", () => perform("REPORT_ID", "radio_microphone"), { danger: true })}
+          {choice(
+            warnedActions["R04_SIGN"] ? "Xác nhận ký sổ trực" : "Ký sổ trực",
+            () => confirmRiskyAction(
+              "R04_SIGN",
+              "DẤU HIỆU CẢNH BÁO · R-04",
+              "Trang sổ trực tự động lật ra dòng trống ẩm lạnh, nét chữ các ca trước đều nhòe đi như bị thấm nước. Bấm lần nữa nếu bạn vẫn muốn đặt bút ký.",
+              () => perform("SIGN_LOGBOOK", "duty_logbook")
+            ),
+            { danger: true }
+          )}
+          {choice(
+            warnedActions["R04_REPORT"] ? "Xác nhận báo mã" : "Báo mã nhân viên",
+            () => confirmRiskyAction(
+              "R04_REPORT",
+              "DẤU HIỆU CẢNH BÁO · R-04",
+              "Đèn thu âm trên bộ đàm tự bật sáng dù chưa có trạm đầu cuối kết nối. Bấm lần nữa nếu bạn vẫn muốn đọc mã nhân viên.",
+              () => perform("REPORT_ID", "radio_microphone")
+            ),
+            { danger: true }
+          )}
           {choice("Nghe điện thoại", () => perform("ANSWER_PHONE", "internal_phone"), { danger: true })}
           {moveNext}
         </>;
@@ -613,17 +686,34 @@ export default function App() {
           {choice("Kiểm tra tủ dụng cụ", () => say("TỦ DỤNG CỤ", has("I-02") ? "Chìa khóa mở được ngăn dụng cụ." : "Tủ dụng cụ đang khóa.", false, false))}
           {choice("Lấy băng cassette", () => addItem("I-03"), { done: has("I-03"), disabled: !has("I-02") || has("I-03") })}
           {choice("Lấy cầu chì 30A", () => addItem("I-04"), { done: has("I-04"), disabled: has("I-04") })}
-          {choice("Nghe tiếng gõ tủ 04", () => { setFlag("locker_knocking", true); say("TỦ SỐ 04", "Bên trong tủ vang lên ba tiếng gõ chậm."); })}
-          {choice("Mở tủ số 04", () => {
-            perform("OPEN_LOCKER_04", "locker_04");
-            if (!state.flags.locker_knocking) say("TỦ SỐ 04", "Tủ số 04 trống rỗng.");
-          }, { danger: true })}
+          {choice("Áp tai nghe tủ 04", () => { setFlag("locker_knocking", true); say("DẤU HIỆU CẢNH BÁO · R-06", "Bên trong tủ vang lên ba tiếng gõ chậm. Hơi lạnh rỉ qua khe cửa."); })}
+          {choice(
+            state.flags.locker_knocking ? "Xác nhận mở tủ 04" : "Mở tủ số 04",
+            () => {
+              if (!state.flags.locker_knocking) {
+                setFlag("locker_knocking", true);
+                say("DẤU HIỆU CẢNH BÁO · R-06", "Ngay khi bạn chạm vào tay nắm, bên trong tủ 04 vang lên ba tiếng gõ chậm: cốc... cốc... cốc. Bấm lần nữa nếu bạn vẫn muốn mở cửa tủ.");
+                return;
+              }
+              perform("OPEN_LOCKER_04", "locker_04");
+            },
+            { danger: true }
+          )}
           {moveNext}
         </>;
       case "SC-04":
         return <>
-          {choice("Đọc sơ đồ tải điện", () => discoverClue("C-04", "OVERLOAD làm thấu kính quét xuyên tường; LOW triệt nhiễu."), { done: discoveredClues.includes("C-04") })}
-          {choice("Đặt nguồn OVERLOAD", () => perform("USE_ITEM", "power_overload_switch"), { danger: true })}
+          {choice("Đọc sơ đồ tải điện", () => discoverClue("C-04", "OVERLOAD làm thấu kính quét xuyên tường; LOW triệt nhiễu cho radar."), { done: discoveredClues.includes("C-04") })}
+          {choice(
+            warnedActions["R05_OVERLOAD"] ? "Xác nhận gạt OVERLOAD" : "Đặt nguồn OVERLOAD",
+            () => confirmRiskyAction(
+              "R05_OVERLOAD",
+              "DẤU HIỆU CẢNH BÁO · R-05",
+              "Kim đồng hồ áp suất rung bần bật ở vạch đỏ và bảng sơ đồ C-04 cảnh báo chế độ này sẽ làm nổ rơ-le khóa cổng. Bấm lần nữa nếu bạn vẫn muốn gạt cầu dao.",
+              () => perform("USE_ITEM", "power_overload_switch")
+            ),
+            { danger: true }
+          )}
           {choice("Giải mã cân bằng tải", () => setActiveModal("puzzles"), { done: solved("PZ-01"), disabled: !has("I-04") || solved("PZ-01") })}
           {moveNext}
         </>;
@@ -631,18 +721,16 @@ export default function App() {
         return <>
           {choice("Xem camera hành lang", () => discoverClue("C-06", "Khi nguồn LOW hoặc sương tràn, sương hướng về nguồn sáng."), { done: discoveredClues.includes("C-06") })}
           {choice("Đọc bảng bộ lọc", () => discoverClue("C-07", "Ánh sáng đỏ trên 620nm vô hiệu hóa chức năng ghi nhận."), { done: discoveredClues.includes("C-07") })}
-          {choice("Vận hành thiết bị quan sát", () => {
-            perform("USE_OBSERVATION_GEAR", "observation_gear");
-            if (String(state.flags.power_mode) === "low") say("RADAR", "Thiết bị hiển thị rõ góc mù của thấu kính: 2714.");
-          })}
+          {choice("Vận hành thiết bị quan sát", inspectRadarGear)}
           {choice("Mở khóa giải mã (PZ-02 / PZ-03)", () => setActiveModal("puzzles"))}
           {moveNext}
         </>;
       case "SC-06": {
         const canEndingB = Boolean(state.flags.red_filter_installed) && !state.flags.identity_exposed;
         const canEndingS =
-          canEndingB &&
-          discoveredClues.includes("C-08") &&
+  canEndingB &&
+  discoveredClues.includes("C-05") &&
+  discoveredClues.includes("C-08") &&
           engine.investigation.getInvestigationStatus("R-03") === "verified" &&
           engine.investigation.getInvestigationStatus("R-04") === "debunked_fake" &&
           engine.investigation.getInvestigationStatus("R-05") === "debunked_fake";
@@ -663,10 +751,38 @@ export default function App() {
   };
 
   if (state.activeEndingId) {
+    const getDeathReason = () => {
+      if (!state.flags.red_filter_installed && state.currentSceneId === "SC-06") {
+        return "Bạn đã bước vào chùm sáng trắng nguyên bản của thấu kính khi chưa lắp kính lọc quang học đỏ. Cảm biến buồng đèn đã ghi nhận toàn bộ dấu vết sinh học của bạn.";
+      }
+      if (state.flags.fog_breached) {
+        return "Làn sương trắng đã tràn qua hàng rào bảo vệ của trạm và bao vây hành lang.";
+      }
+      if (state.flags.identity_exposed) {
+        return "Danh tính của bạn đã bị ghi lại trên hồ sơ ca trực. Trạm 09 đã khóa tên bạn vào vòng lặp kế tiếp.";
+      }
+      if (state.entityStates["EN-02"] === "stalking") {
+        return "Thực thể từ tủ đồ số 04 đã thoát ra ngoài và cắt đứt đường rút khỏi buồng đèn.";
+      }
+      return "Trạm 09 đã ghi nhận sự hiện diện của bạn. Máy in nhiệt bắt đầu chạy dòng mô tả ca trực tiếp theo.";
+    };
+
     const endings: Record<string, { title: string; text: string; rank: string }> = {
-      "END-01": { title: "Hồ Sơ Mũi Sương & Sự Thật 1998", text: "Tín hiệu đảo pha quét qua màn sương. Toàn bộ quy tắc giả bị vạch trần, bản ghi của Trạm 09 khép lại an toàn.", rank: "HẠNG S · HOÀN HẢO" },
-      "END-02": { title: "Ngắt Mạch Cưỡng Bức", text: "Thấu kính tắt. Sương rút khỏi trạm, nhưng nguồn phát tín hiệu bất thường vẫn còn tồn tại ở một nơi khác.", rank: "HẠNG B · SỐNG SÓT" },
-      "END-03": { title: "Bản Tin Thời Tiết Tiếp Theo", text: "Trạm 09 đã ghi nhận sự hiện diện của bạn. Máy in nhiệt bắt đầu chạy dòng mô tả ca trực kế tiếp.", rank: "DEAD · THẤT BẠI" }
+      "END-01": {
+        title: "Hồ Sơ Mũi Sương & Sự Thật 1998",
+        text: "Tín hiệu đảo pha ở bước sóng 620nm quét ngược qua thấu kính Fresnel. Vòng lặp âm thanh giả mạo con gái trạm trưởng Lê Văn Hùng vỡ tan trong nhiễu trắng, khép lại chuỗi quy tắc giả do ông để lại. Cuốn sổ của Trần Minh vẫn dừng ở trang ghi chép cuối cùng chưa lời giải đáp — nhưng khi ánh bình minh ló rạng ngoài mũi đá, bản ghi của Trạm 09 đã ngừng hoạt động.",
+        rank: "HẠNG S · SỰ THẬT TRỌN VẸN"
+      },
+      "END-02": {
+        title: "Ngắt Mạch Cưỡng Bức",
+        text: "Cầu dao chính sập xuống, thấu kính tắt lịm và làn sương từ từ rút ra ngoài hàng rào. Bạn sống sót qua đêm trực, nhưng hệ thống chỉ tạm ngừng cấp điện — cuốn sổ trực vẫn còn nguyên những quy tắc giả của Lê Văn Hùng chờ người trực ca kế tiếp.",
+        rank: "HẠNG B · SỐNG SÓT"
+      },
+      "END-03": {
+        title: "Bản Tin Thời Tiết Tiếp Theo",
+        text: getDeathReason(),
+        rank: "DEAD · THẤT BẠI"
+      }
     };
     const ending = endings[state.activeEndingId] ?? endings["END-03"];
     return (
@@ -676,7 +792,7 @@ export default function App() {
           <div className="location-sub">HỒ SƠ TRẠM 09 · KẾT THÚC CA TRỰC</div>
           <h1>{ending.title}</h1>
           <div className="ending-rank">{ending.rank}</div>
-          <p>{ending.text}</p>
+          <p style={{ lineHeight: 1.65 }}>{ending.text}</p>
           <button className="btn-primary" onClick={() => window.location.reload()}>Bắt đầu lại ca trực</button>
         </div>
       </main>
@@ -818,7 +934,7 @@ export default function App() {
                 {activeModal === "logs" && `NHẬT KÝ CA TRỰC (${state.logs.length})`}
                 {activeModal === "hint" && "MANH MỐI ĐỊNH HƯỚNG"}
               </h3>
-              <button type="button" className="close-modal" onClick={() => setActiveModal(null)}>Đóng ✕</button>
+              <button type="button" className="close-modal" onClick={() => setActiveModal(null)}>Đóng (Esc) ✕</button>
             </div>
 
             {activeModal === "rules" && (
@@ -926,7 +1042,7 @@ export default function App() {
             {activeModal === "hint" && (
               <div>
                 <p style={{ fontSize: "0.95rem", lineHeight: 1.6 }}>{getHintText()}</p>
-                <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid var(--border)" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid var(--border)" }}>
                   <button
                     type="button"
                     className="btn-ghost-sm"
