@@ -73,6 +73,14 @@ export const CHAPTER1_CLUES: ClueDefinition[] = [
       "Nét chữ run rẩy của Lê Văn Hùng: 'Bản ghi ở mặt B là giọng thật của con bé. Nhưng giọng nói qua điện thoại không phải con bé. Tôi biết có thứ gì đó đang bắt chước giọng con bé, nhưng tôi không nỡ ngắt máy. Nó bảo chỉ cần thêm vài cái tên vào sổ trực và bật quá tải thấu kính, nó sẽ trả con bé lại. Tôi đã viết thêm những quy tắc giả vào sổ trực. Nếu có người đến sau đọc được tờ giấy này, xin hãy đảo ngược tần số buồng đèn.'",
     relatedRuleIds: ["R-04", "R-05", "R-06"],
   },
+  {
+    id: "C-09",
+    title: "Thẻ nhân viên Phạm Quốc Đạt",
+    category: "document",
+    summary: "Thẻ nhân viên cũ mang tên Phạm Quốc Đạt được tìm thấy bên dưới giường tại SC-03.",
+    detailContent: "Một thẻ nhân viên cũ nằm khuất dưới giường sắt tại SC-03. Tên Phạm Quốc Đạt vẫn có thể đọc được. Phần ghi chú ở mặt sau đã bị hư hại. Dữ kiện hiện có chưa đủ để xác định vai trò của người này, thời điểm rời đi hoặc chuyện gì đã xảy ra với người đó.",
+    relatedRuleIds: [],
+  },
 ];
 
 export const CHAPTER1_DEDUCTION_GROUPS: DeductionGroup[] = [

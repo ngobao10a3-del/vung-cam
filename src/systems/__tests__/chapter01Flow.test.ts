@@ -114,4 +114,25 @@ describe("FIX 07 & FIX 09 · Chapter 01 Full Flow Verification", () => {
     dispatcher.dispatch({ type: "PLAYER_ACTION_PERFORMED", actionTag: ACTION_TAGS.LEAVE_SCENE, targetId: "leave_SC-04", sceneId: "SC-04" });
     expect(rules.getViolationCount("R-10")).toBe(1);
   });
-});
+
+  it("FIX15: C-09 được đăng ký và xuất hiện trong sổ điều tra sau khi khám phá", () => {
+    const { store, investigation } = setupChapter01();
+
+    expect(investigation.getClue("C-09")?.title).toBe("Thẻ nhân viên Phạm Quốc Đạt");
+
+    store.discoverClue("C-09");
+
+    expect(investigation.getDiscoveredClues().map(clue => clue.id)).toContain("C-09");
+  });
+  it("FIX16: khám phá C-09 nhiều lần không tạo manh mối trùng lặp", () => {
+    const { store, investigation } = setupChapter01();
+
+    store.discoverClue("C-09");
+    store.discoverClue("C-09");
+
+    const discovered = investigation
+      .getDiscoveredClues()
+      .filter(clue => clue.id === "C-09");
+
+    expect(discovered).toHaveLength(1);
+  });});

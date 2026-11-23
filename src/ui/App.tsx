@@ -354,8 +354,7 @@ export default function App() {
   const [savedSlot, setSavedSlot] = useState<SaveData | null>(() => loadSavedFromStorage());
   // Cơ chế cảnh báo quan sát 2 bước cho các bẫy nguy hiểm (không thêm core flag)
   const [warnedActions, setWarnedActions] = useState<Record<string, boolean>>({});
-  // FIX14_PHAM_QUOC_DAT_TRACE: local viewing state for SC-03 environmental evidence.
-  const [datTraceViewed, setDatTraceViewed] = useState(false);
+
 
   const state = engine.store.snapshot();
   const sceneIdx = SCENES.findIndex(s => s.id === state.currentSceneId);
@@ -445,7 +444,10 @@ export default function App() {
   };
 
   const addItem = (id: string) => {
-    if (has(id)) return;
+    if (has(id)) {
+      say("VẬT PHẨM", "Bạn đã có vật phẩm này trong túi đồ.", false, false);
+      return;
+    }
     engine.store.addItem(id);
     say("THU THẬP VẬT PHẨM", `Đã cất [${ITEMS[id]?.name ?? id}] vào túi đồ. Bấm vào ô vật phẩm bên dưới để kiểm tra chi tiết.`);
   };
@@ -507,15 +509,27 @@ export default function App() {
   const submitPuzzle = (puzzleId: string) => {
     const inputVal = puzzleInputs[puzzleId] ?? "";
     const result = engine.puzzles.submitSolution(puzzleId, inputVal);
+
     if (result.status === "solved") {
       setPuzzleInputs(prev => ({ ...prev, [puzzleId]: "" }));
       setActiveModal(null);
       say("GIẢI MÃ THÀNH CÔNG", `Cơ cấu ${puzzleId} đã mở khóa!`);
+    } else if (result.status === "already_solved") {
+      setPuzzleInputs(prev => ({ ...prev, [puzzleId]: "" }));
+      setActiveModal(null);
+      say("CƠ CẤU ĐÃ HOÀN TẤT", `${puzzleId} đã được giải trước đó. Không cần thực hiện lại.`);
     } else if (result.status === "failed") {
       say("MÃ KHÔNG KHỚP", `Sai mật mã ${puzzleId} (lần thử ${result.attemptsUsed}). Hãy đối chiếu kỹ thông số quan sát và vật phẩm trong túi đồ.`, true, false);
+    } else if (result.status === "locked") {
+      say("CƠ CẤU BỊ KHÓA", `Bạn đã sử dụng hết lượt thử của ${puzzleId}. Cơ cấu không nhận thêm mật mã.`);
+    } else if (result.status === "missing_items") {
+      say("THIẾU VẬT PHẨM", `Bạn chưa có đủ vật phẩm cần thiết để thực hiện ${puzzleId}.`);
+    } else if (result.status === "not_found") {
+      say("KHÔNG TÌM THẤY CƠ CẤU", `Không xác định được dữ liệu giải đố ${puzzleId}.`);
     } else {
-      say("THÔNG BÁO", `Không thể thực hiện ${puzzleId}: ${result.status}.`, true, false);
+      say("THÔNG BÁO", `Không thể thực hiện ${puzzleId}.`, true, false);
     }
+
     refreshUI();
   };
 
@@ -526,13 +540,22 @@ export default function App() {
   };
 
   const inspectRadarGear = () => {
-    perform("USE_OBSERVATION_GEAR", "observation_gear");
-    if (String(engine.store.snapshot().flags.power_mode) === "low") {
+    const currentPowerMode = String(engine.store.snapshot().flags.power_mode);
+
+    if (currentPowerMode !== "low") {
+      perform("USE_OBSERVATION_GEAR", "observation_gear");
       say(
-        "DỮ LIỆU QUAN SÁT RADAR",
-        "Nguồn tải LOW đã triệt nhiễu sóng mang. Trên màn quét xuất hiện vùng mù của thấu kính tại: Góc phương vị 27° Bắc — Biên độ lệch pha 14′ (đối chiếu Sổ trực Trần Minh C-02 để lập mã tọa độ)."
+        "RADAR CHƯA ỔN ĐỊNH",
+        "Nguồn điện chưa chuyển sang LOW. Nhiễu sóng mang vẫn che khuất dữ liệu tọa độ. Hãy giải PZ-01 trước."
       );
+      return;
     }
+
+    perform("USE_OBSERVATION_GEAR", "observation_gear");
+    say(
+      "DỮ LIỆU QUAN SÁT RADAR",
+      "Nguồn tải LOW đã triệt nhiễu sóng mang. Trên màn quét xuất hiện vùng mù của thấu kính tại: Góc phương vị 27° Bắc — Biên độ lệch pha 14′ (đối chiếu Sổ trực Trần Minh C-02 để lập mã tọa độ)."
+    );
   };
 
   const getHintText = (): string => {
@@ -580,7 +603,14 @@ export default function App() {
         return [
           { id: "hs1", label: discoveredClues.includes("C-01") ? "✓ Bản tin nhiệt" : "Máy in bản tin", x: "23%", y: "48%", done: discoveredClues.includes("C-01"), onClick: () => discoverClue("C-01", "Bản tin mô tả chính xác trang phục của bạn trước thời điểm hiện tại.") },
           { id: "hs2", label: discoveredClues.includes("C-03") ? "✓ Hồ sơ nhân sự" : "Hồ sơ trên bàn", x: "50%", y: "62%", done: discoveredClues.includes("C-03"), onClick: () => { discoverClue("C-03", "Hồ sơ xác nhận trạm trưởng Lê Văn Hùng đã mất tích."); setFlag("captain_missing_confirmed", true); } },
-          { id: "hs3", label: `Bộ đàm (${String(state.flags.radio_state).toUpperCase()})`, x: "76%", y: "48%", done: state.flags.radio_state === "paused", onClick: () => { setFlag("radio_state", "paused"); say("BỘ ĐÀM", "Đã chuyển bộ đàm sang trạng thái TẠM DỪNG (PAUSED)."); } }
+          { id: "hs3", label: `Bộ đàm (${String(state.flags.radio_state).toUpperCase()})`, x: "76%", y: "48%", done: state.flags.radio_state === "paused", onClick: () => {
+            if (state.flags.radio_state === "paused") {
+              say("BỘ ĐÀM", "Bộ đàm hiện đã ở trạng thái TẠM DỪNG (PAUSED).", false, false);
+              return;
+            }
+            setFlag("radio_state", "paused");
+            say("BỘ ĐÀM", "Đã chuyển bộ đàm sang trạng thái TẠM DỪNG (PAUSED).");
+          } }
         ];
       case "SC-03":
         return [
@@ -595,15 +625,14 @@ export default function App() {
           }},
           {
             id: "hs3",
-            label: datTraceViewed ? "✓ Thẻ nhân viên cũ" : "Thẻ nhân viên dưới giường",
+            label: discoveredClues.includes("C-09") ? "✓ Thẻ nhân viên cũ" : "Thẻ nhân viên dưới giường",
             x: "47%",
             y: "76%",
-            done: datTraceViewed,
+            done: discoveredClues.includes("C-09"),
             onClick: () => {
-              setDatTraceViewed(true);
-              say(
-                "DẤU VẾT NHÂN SỰ · PHẠM QUỐC ĐẠT",
-                "Một thẻ nhân viên cũ nằm khuất dưới chân giường sắt. Tên trên thẻ vẫn đọc được: Phạm Quốc Đạt. Phần ghi chú ở mặt sau đã bị hư hại, chưa đủ dữ kiện để xác định vì sao chiếc thẻ bị bỏ lại tại đây."
+              discoverClue(
+                "C-09",
+                "Một thẻ nhân viên cũ nằm khuất dưới chân giường sắt tại SC-03. Tên trên thẻ vẫn đọc được: Phạm Quốc Đạt. Phần ghi chú ở mặt sau đã bị hư hại, chưa đủ dữ kiện để xác định vai trò hoặc chuyện gì đã xảy ra với người này."
               );
             }
           }
@@ -623,6 +652,10 @@ export default function App() {
       case "SC-06":
         return [
           { id: "hs1", label: state.flags.red_filter_installed ? "✓ Đã lắp bộ lọc đỏ" : "Khay bộ lọc đỏ", x: "31%", y: "48%", done: Boolean(state.flags.red_filter_installed), onClick: () => {
+            if (state.flags.red_filter_installed) {
+              say("THẤU KÍNH", "Bộ lọc đỏ đã được lắp. Luồng sáng vẫn duy trì ở mức 620nm an toàn.", false, false);
+              return;
+            }
             if (!has("I-05")) { say("THIẾU VẬT PHẨM", "Bạn chưa có Bộ lọc đỏ (I-05).", true, false); return; }
             setFlag("red_filter_installed", true);
             say("THẤU KÍNH", "Bộ lọc đỏ đã được lắp. Luồng sáng chuyển sang sắc đỏ 620nm an toàn.");
@@ -672,7 +705,14 @@ export default function App() {
           {choice("Phát băng cassette", () => discoverClue("C-05", "Mặt A: Cảnh báo của Trần Minh. Mặt B: Bản ghi âm gốc giọng con gái Hùng, có nhịp thở và ngữ điệu tự nhiên. Giọng nói qua điện thoại là một bản bắt chước, không phải bản ghi trên băng."), { done: discoveredClues.includes("C-05"), disabled: !has("I-03") })}
           {choice("Lấy chìa khóa tủ", () => addItem("I-02"), { done: has("I-02"), disabled: has("I-02") })}
           {choice("Lấy sổ mã tần số", () => addItem("I-06"), { done: has("I-06"), disabled: has("I-06") })}
-          {choice("Tạm dừng bộ đàm", () => { setFlag("radio_state", "paused"); say("BỘ ĐÀM", "Bộ đàm đã tạm dừng."); }, { done: state.flags.radio_state === "paused" })}
+          {choice("Tạm dừng bộ đàm", () => {
+            if (state.flags.radio_state === "paused") {
+              say("BỘ ĐÀM", "Bộ đàm hiện đã ở trạng thái TẠM DỪNG (PAUSED).", false, false);
+              return;
+            }
+            setFlag("radio_state", "paused");
+            say("BỘ ĐÀM", "Bộ đàm đã tạm dừng.");
+          }, { done: state.flags.radio_state === "paused" })}
           {choice("Trả lời bộ đàm", () => perform("ANSWER_RADIO", "radio_microphone"), { danger: true })}
           {choice(
             warnedActions["R04_SIGN"] ? "Xác nhận ký sổ trực" : "Ký sổ trực",
@@ -703,15 +743,14 @@ export default function App() {
           {choice("Lấy băng cassette", () => addItem("I-03"), { done: has("I-03"), disabled: !has("I-02") || has("I-03") })}
           {choice("Lấy cầu chì 30A", () => addItem("I-04"), { done: has("I-04"), disabled: has("I-04") })}
           {choice(
-            datTraceViewed ? "Xem lại thẻ nhân viên Phạm Quốc Đạt" : "Kiểm tra thẻ nhân viên dưới giường",
+            discoveredClues.includes("C-09") ? "Xem lại thẻ nhân viên Phạm Quốc Đạt" : "Kiểm tra thẻ nhân viên dưới giường",
             () => {
-              setDatTraceViewed(true);
-              say(
-                "DẤU VẾT NHÂN SỰ · PHẠM QUỐC ĐẠT",
-                "Một thẻ nhân viên cũ nằm khuất dưới chân giường sắt. Tên trên thẻ vẫn đọc được: Phạm Quốc Đạt. Phần ghi chú ở mặt sau đã bị hư hại, chưa đủ dữ kiện để xác định vì sao chiếc thẻ bị bỏ lại tại đây."
+              discoverClue(
+                "C-09",
+                "Một thẻ nhân viên cũ nằm khuất dưới chân giường sắt tại SC-03. Tên trên thẻ vẫn đọc được: Phạm Quốc Đạt. Phần ghi chú ở mặt sau đã bị hư hại, chưa đủ dữ kiện để xác định vai trò hoặc chuyện gì đã xảy ra với người này."
               );
             },
-            { done: datTraceViewed }
+            { done: discoveredClues.includes("C-09") }
           )}
           {choice("Áp tai nghe tủ 04", () => { setFlag("locker_knocking", true); say("DẤU HIỆU CẢNH BÁO · R-06", "Bên trong tủ vang lên ba tiếng gõ chậm. Hơi lạnh rỉ qua khe cửa."); })}
           {choice(
@@ -763,6 +802,10 @@ export default function App() {
           engine.investigation.getInvestigationStatus("R-05") === "debunked_fake";
         return <>
           {choice("Lắp bộ lọc đỏ", () => {
+            if (state.flags.red_filter_installed) {
+              say("THẤU KÍNH", "Bộ lọc đỏ đã được lắp vào thấu kính.", false, false);
+              return;
+            }
             if (!has("I-05")) { say("THIẾU VẬT PHẨM", "Bạn chưa có Bộ lọc đỏ (I-05).", true, false); return; }
             setFlag("red_filter_installed", true);
             say("THẤU KÍNH", "Bộ lọc đỏ đã được lắp vào thấu kính.");
@@ -852,7 +895,7 @@ export default function App() {
           </button>
 
           <button type="button" className="hud-icon-btn" onClick={() => setActiveModal("notebook")}>
-            <span className="hud-badge">{discoveredClues.length}/8</span>
+            <span className="hud-badge">{discoveredClues.length}/9</span>
             <span className="ico-glyph">🗂️</span>
             <span className="ico-label">Sổ tay</span>
           </button>
@@ -955,7 +998,7 @@ export default function App() {
             <div className="modal-head">
               <h3>
                 {activeModal === "rules" && `QUY TẮC ĐÃ PHÁT HIỆN (${discoveredRules.length}/10)`}
-                {activeModal === "notebook" && `SỔ TAY ĐIỀU TRA (${discoveredClues.length}/8)`}
+                {activeModal === "notebook" && `SỔ TAY ĐIỀU TRA (${discoveredClues.length}/9)`}
                 {activeModal === "puzzles" && `CƠ CẤU GIẢI MÃ · ${scene.name.toUpperCase()}`}
                 {activeModal === "map" && "SƠ ĐỒ TRẠM HẢI ĐĂNG 09"}
                 {activeModal === "logs" && `NHẬT KÝ CA TRỰC (${state.logs.length})`}
