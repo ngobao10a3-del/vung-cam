@@ -354,6 +354,8 @@ export default function App() {
   const [savedSlot, setSavedSlot] = useState<SaveData | null>(() => loadSavedFromStorage());
   // Cơ chế cảnh báo quan sát 2 bước cho các bẫy nguy hiểm (không thêm core flag)
   const [warnedActions, setWarnedActions] = useState<Record<string, boolean>>({});
+  // FIX14_PHAM_QUOC_DAT_TRACE: local viewing state for SC-03 environmental evidence.
+  const [datTraceViewed, setDatTraceViewed] = useState(false);
 
   const state = engine.store.snapshot();
   const sceneIdx = SCENES.findIndex(s => s.id === state.currentSceneId);
@@ -590,7 +592,21 @@ export default function App() {
               return;
             }
             perform("OPEN_LOCKER_04", "locker_04");
-          }}
+          }},
+          {
+            id: "hs3",
+            label: datTraceViewed ? "✓ Thẻ nhân viên cũ" : "Thẻ nhân viên dưới giường",
+            x: "47%",
+            y: "76%",
+            done: datTraceViewed,
+            onClick: () => {
+              setDatTraceViewed(true);
+              say(
+                "DẤU VẾT NHÂN SỰ · PHẠM QUỐC ĐẠT",
+                "Một thẻ nhân viên cũ nằm khuất dưới chân giường sắt. Tên trên thẻ vẫn đọc được: Phạm Quốc Đạt. Phần ghi chú ở mặt sau đã bị hư hại, chưa đủ dữ kiện để xác định vì sao chiếc thẻ bị bỏ lại tại đây."
+              );
+            }
+          }
         ];
       case "SC-04":
         return [
@@ -686,6 +702,17 @@ export default function App() {
           {choice("Kiểm tra tủ dụng cụ", () => say("TỦ DỤNG CỤ", has("I-02") ? "Chìa khóa mở được ngăn dụng cụ." : "Tủ dụng cụ đang khóa.", false, false))}
           {choice("Lấy băng cassette", () => addItem("I-03"), { done: has("I-03"), disabled: !has("I-02") || has("I-03") })}
           {choice("Lấy cầu chì 30A", () => addItem("I-04"), { done: has("I-04"), disabled: has("I-04") })}
+          {choice(
+            datTraceViewed ? "Xem lại thẻ nhân viên Phạm Quốc Đạt" : "Kiểm tra thẻ nhân viên dưới giường",
+            () => {
+              setDatTraceViewed(true);
+              say(
+                "DẤU VẾT NHÂN SỰ · PHẠM QUỐC ĐẠT",
+                "Một thẻ nhân viên cũ nằm khuất dưới chân giường sắt. Tên trên thẻ vẫn đọc được: Phạm Quốc Đạt. Phần ghi chú ở mặt sau đã bị hư hại, chưa đủ dữ kiện để xác định vì sao chiếc thẻ bị bỏ lại tại đây."
+              );
+            },
+            { done: datTraceViewed }
+          )}
           {choice("Áp tai nghe tủ 04", () => { setFlag("locker_knocking", true); say("DẤU HIỆU CẢNH BÁO · R-06", "Bên trong tủ vang lên ba tiếng gõ chậm. Hơi lạnh rỉ qua khe cửa."); })}
           {choice(
             state.flags.locker_knocking ? "Xác nhận mở tủ 04" : "Mở tủ số 04",
